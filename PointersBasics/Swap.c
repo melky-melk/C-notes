@@ -24,7 +24,7 @@ int main(){
 	int temp = *pointerA;
 	a = *pointerC;
 	c = *pointerB;
-	b = temp;
+	b = temp;z
 
 	printf("\nThe value after swapping are: \n");
 	printf("element 1 = %d\n", a);
