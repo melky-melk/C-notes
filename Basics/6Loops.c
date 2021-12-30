@@ -11,6 +11,11 @@ int main() {
     printf("%d", ans);
     
     return 0;
+
+	// is while true while 0 is while false
+	while (1){
+		printf()
+	}
 }
 
 int max_of_four(int a, int b, int c, int d){
