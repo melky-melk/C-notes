@@ -1,7 +1,9 @@
-
 #include <stdio.h>
   
+// double pointers
 // C program to demonstrate pointer to pointer
+
+// strongly suggest avoiding anything more a double pointer 
 int main()
 {
 	int var = 789;
@@ -26,3 +28,12 @@ int main()
 	
 	return 0;
 } 
+
+/*
+-> stores
+
+ptr1 -> ptr2 -> &var -> 789
+
+address -> address -> value
+
+*/

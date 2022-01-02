@@ -25,23 +25,22 @@ int main()
 	// assign value to name of person1
 	strcpy(melk.name, "Chiara");
 	strcpy(bean.name, "Emily");
-	strcpy(lime.name, "Taisia");
-	strcpy(lemon.name, "Leo");
+
+	struct Person lemon = {"Leo", "Lemon", 18};
+	struct Person lime = {.name = "Taisia", .onlineName = "Lime", 18};
+
 	
 	strcpy(melk.onlineName, "melk");
 	strcpy(bean.onlineName, "beab");
 	strcpy(lime.onlineName, "lime");
-	strcpy(lemon.onlineName, "lemon");
 
 	strcpy(melk.occupation, "Uni Student");
 	strcpy(bean.occupation, "High School Student");
 	strcpy(lime.occupation, "Uni Student");
-	strcpy(lemon.occupation, "High School Student");
 
 	melk.age = 18;
 	bean.age = 18;
 	lime.age = 18;
-	lemon.age = 18;
 
 	printInfo(melk);
 	printInfo(bean);
