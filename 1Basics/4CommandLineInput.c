@@ -1,10 +1,8 @@
 #include <stdio.h>
 
 //to get input from the command line specify it in the main
-int main(char* argv[]){
-	//whenever you want to get string input you have to make an array length for it
-	// or can make an array pointer with an array
-	char name[];
+int main(int argc, char *argv[]){
+	char name[20];
 	
 	printf("What is your name? ");
 	scanf("%s", name);

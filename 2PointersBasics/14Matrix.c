@@ -10,16 +10,25 @@ int main(){
     // this creates a pointer to a bunch of character arrays that are next to each other
     char * pointerNames[20] = {"Daniel", "Luke", "Oscar", "Alex", "Katrina"};
 
+	// double pointers for arrays are super fucking sketchy, it doesnt like it when you try to use a char* for a string 
+	// much rather prefers an array for pointers
+	// char **doublePointerNames = {"Daniel", "Luke", "Oscar", "Alex", "Katrina"};
+
+	// you would need to individually put in each name for this one.
+	char **doublePointerNames = (char *) malloc (20 * sizeof(char));
+
     for (int i = 0; i < 5; i++)
     {
-        printf("%s\n", names[i]);
+        printf("array %s\n", names[i]);
+		printf("pointer %s\n", *(pointerNames + i));
     }
 
     printf("%c\n", names[0][0]); //First character of the first name which is D
 
     // the pointer points to character arrays, rather than
     printf("%s\n", *pointerNames);
-    pointerNames[0] ++;
+    //goes to the next character in the array, aniel instead of Daniel
+	pointerNames[0] ++;
     printf("%s\n", *pointerNames);
 
     // names[2][1] = 'z';  // Again: will not work since names act as char*[20]

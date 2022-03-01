@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /*
 When a struct type is declared, no storage or memory is allocated. 
@@ -15,7 +16,9 @@ struct Person {
 	char onlineName[50];
 	char occupation[50];
 	int age;
-} melk, bean, lime, lemon, gang[4]; //make sure to include the semicolon and declare varibles here
+} melk, bean, gang[4]; //make sure to include the semicolon and declare varibles here
+// it initialises the gang as an array of 4 person
+// and it declares variables some object variables so you dont need to write "struct Person melk;"
 
 // function prototype
 void printInfo(struct Person person);
@@ -26,31 +29,31 @@ int main()
 	strcpy(melk.name, "Chiara");
 	strcpy(bean.name, "Emily");
 
+	// bean = {.firstName = "Emily"}; //need to specify struct Person in front?
+
+	// you can create an object if it follows the same attributes in order. 
+	// it knows that name is leo and lemon is online name already
 	struct Person lemon = {"Leo", "Lemon", 18};
+	// you can be more specify however by doin the attributes and specifically putting it there
 	struct Person lime = {.name = "Taisia", .onlineName = "Lime", 18};
 
-	
 	strcpy(melk.onlineName, "melk");
 	strcpy(bean.onlineName, "beab");
-	strcpy(lime.onlineName, "lime");
 
 	strcpy(melk.occupation, "Uni Student");
 	strcpy(bean.occupation, "High School Student");
-	strcpy(lime.occupation, "Uni Student");
 
 	melk.age = 18;
 	bean.age = 18;
-	lime.age = 18;
-
-	printInfo(melk);
-	printInfo(bean);
-	printInfo(lime);
-	printInfo(lemon);
 
 	gang[0] = melk;
 	gang[1] = bean;
 	gang[2] = lime;
 	gang[3] = lemon;
+
+	for (int i = 0; i < 4; i++) {
+		printInfo(gang[i]);
+	}
 
 	return 0;
 }
@@ -59,7 +62,7 @@ void printInfo(struct Person person) {
 	printf("\n------------Displaying information------------\n");
 	// print struct variables
 	printf("Name: %s\n", person.name);
-	printf("Online Handle: %s\n", person.name);
-	printf("Occupation: %s\n", person.name);
-	printf("Age: %s\n", person.name);
+	printf("Online Handle: %s\n", person.onlineName);
+	printf("Occupation: %s\n", person.occupation);
+	printf("Age: %d\n", person.age);
 }

@@ -9,6 +9,7 @@ struct person {
 
 int main()
 {
+	// 
    struct person *ptr;
    int i, n;
 

@@ -22,6 +22,30 @@ void reverse_string(char* str, char* reverse)
     *reverse = '\0';
 }
 
+void reverse_alternative() {
+	char * startOfLine = (char *)malloc(50 * sizeof(char));
+
+	printf("enter a string to reverse: ");
+	fgets(startOfLine, BUFFER, stdin);
+	char * endOfLine = startOfLine;
+
+	// gets to the end of the string, till it hits the null and ends it 
+	while (*endOfLine) {endOfLine++;}
+
+	// printing the lines just to check if the pointers have moved
+	printf("%p, %p\n", startOfLine, endOfLine);
+
+	// then decriment the end of the line till it reaches the start again, then print the characters along the way
+	while (endOfLine + 1 != startOfLine){
+		printf("%c", *(endOfLine--));
+	}
+
+	printf("\n");
+	
+	free(startOfLine);
+	// free(endOfLine); //dont need to free end of line because it is related to start of line?}
+}
+
 int main(void){
     char str[50];
     char rev[50];

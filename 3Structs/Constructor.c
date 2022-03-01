@@ -15,11 +15,16 @@ typeof struct person {
 /* 
 now you can create objects using the keyword person
 
-person p1;
+Person p1;
+
+instead of
+
+struct person p1;
 */
 
+// making a constructor
 struct Person getInformation(){
-	struct Person s1;
+	Person s1;
 
 	printf("Enter name: ");
 	scanf ("%[^\n]%*c", s1.name);
@@ -37,7 +42,7 @@ struct Person getInformation(){
 }
 
 struct Person createPerson(char name[50], char onlineName[50], char occupation[50], int age){
-	struct Person p;
+	Person p;
 
 	strcpy(p.name, name);
 	strcpy(p.onlineName, onlineName);
