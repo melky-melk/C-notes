@@ -62,3 +62,5 @@ int * pnumber = NULL; //guarenteed not to point to anything
 you can make a pointer variable and inside of that pointer you can store ANOTHER POINTER
 when you make a pointer variable you would want to store an address that already exists in a program
 when you create a variable you put an asterisk *p then the name of the variable who's memory address you are storing in
+
+POINTERS WILL ALWAYS **ALWAYS** BE **8 BYTES**

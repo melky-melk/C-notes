@@ -63,3 +63,15 @@ void swapNumbers(int *x,int *y,int *z)
     *x=*z;
     *z=tmp;
 }
+
+
+//int a[], int b[] will still work
+void swap (int *a, int *b){
+	// get the value for a and save it in a new variables
+	int temp = *a;
+
+	// change what the a pointer points to, it now points to what the value of b is 
+	*a = *b;
+	// now make the b point go back to what a was;
+	*b = temp;
+}

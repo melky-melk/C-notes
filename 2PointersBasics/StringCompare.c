@@ -12,6 +12,7 @@ int main(){
 int string_compare(const char* w1, const char* w2, unsigned int len){
 	for (int i = 0; i < len; i++){
 		
+		// 
 		if (*(w1 + i) != *(w2 + i)){
 			return 0;
 		}
