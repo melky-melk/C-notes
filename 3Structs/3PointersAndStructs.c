@@ -22,4 +22,3 @@ int main()
     printf("weight: %f", personPtr->weight);
 
     return 0;
-}
