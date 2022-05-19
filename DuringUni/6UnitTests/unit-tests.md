@@ -1,0 +1,3 @@
+essentially what you want to do for unit tests is in the setup tests, you create a struct that contains all of the information you need for the functions
+
+within the functions you recieve a double void pointer to the struct or thing you created in the set up function, within the functions you test. you want to unpack that void pointer and assign it all the values you use it for so you can properly test without needing to do setup every time
