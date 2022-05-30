@@ -22,6 +22,7 @@ int main(int argc, char **argv) {
     printf("PID: %d\n", getpid());
     sa.sa_flags = SA_SIGINFO;
     sa.sa_sigaction = get_signal_sender_pid;
+    sigaction(SIGUSR1, &sa, NULL);
 
     int pid = fork();
     if (pid < 0) {
@@ -29,6 +30,7 @@ int main(int argc, char **argv) {
         return 1;
     }
 
+	// this is the child process
     if (pid == 0) {
         //getpid() returns the PID for the process
         //printf("Child: Sending signal\nMy PID is %d\n", getpid());
@@ -37,8 +39,6 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-
-    sigaction(SIGUSR1, &sa, NULL);
     pause();
     printf("Parent: PID of signal sender = %d\n", signalPid);
 
