@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"HelloWorld.C": "cpp",
+		"unistd.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "Disabled"
+}
