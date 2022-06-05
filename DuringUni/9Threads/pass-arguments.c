@@ -17,6 +17,7 @@ int main(int argc, char** argv){
 	for (int i = 0; i < 10; i++){
 		// you cannot simply give the thread i, because it is possible that the address for i will change in the meantime
 		// it might read in the value for 0, then while it is processing, the value of i increments to 1 and will thus print the wrong thing
+		// this is not the case for every song
 		int* a = malloc(sizeof(int));
 		*a = i;
 
