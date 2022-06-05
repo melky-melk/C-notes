@@ -35,12 +35,8 @@ int main(int argc, char** argv){
 		printf("thread %d has started\n", i);
 
 		// when you create the thread, you immediately run it, so its essentually just running the function
-		// this works but its not simultenious, because they all have to finish before the next increment happens
-		// only 1 thread running at once
-		// printf("thread %d has started\n", i);
-		// if (pthread_join(&threads[i], NULL) != 0)
-		// 	return 2;
-		// printf("thread %d has finished\n", i);
+		// if you join the threads in the loop it is not simultenious, because they all have to finish execution before the next increment happens
+		// only 1 thread running at once, which defeats the purpose of parrallelism
 	}
 	
 	// so when they are created, all of them start running

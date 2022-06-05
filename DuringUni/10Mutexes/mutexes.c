@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-int mails = 0;
-pthread_mutex_t mutex;
-
+int counter = 0;
 // mutexes do the same thing as a global variable that you keep resetting
+pthread_mutex_t mutex;
+// can create mutexes in the static code
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
 
 void* routine(){
 	for (int i = 0; i < 1000000; i++){
@@ -13,12 +15,16 @@ void* routine(){
 		// taking a lock, waiting until it is unlocked, locking it when completing an operation 
 		pthread_mutex_lock(&mutex);
 		// if any point, a thread is executing the code inbetween, there isnt any other thread that can execute this line at the same time
-		mails++;
+		counter++; // read counter increment counter write back to counter
+
 		// and unlocking it when finished
 		pthread_mutex_unlock(&mutex);
-		// read mails
-		// increment mails
-		// write back to mails
+
+		/*		
+		lock = 1;
+		counter++;
+		lock = 0;
+		*/
 	}
 }
 
@@ -32,25 +38,21 @@ int main(int argc, char** argv){
 	// the next is the attribute you are giving to it
 	// next is the function you are performing
 	// the last is a void pointer, which the function can unpack to get all the information you need
-	if (pthread_create(&p1, NULL, &routine, NULL) != 0){
+	if (pthread_create(&p1, NULL, &routine, NULL) != 0)
 		return 1;
-	}
 
-	if (pthread_create(&p2, NULL, &routine, NULL) != 0){
+	if (pthread_create(&p2, NULL, &routine, NULL) != 0)
 		return 2;
-	}
 
-	if (pthread_join(p1, NULL) != 0){
+	if (pthread_join(p1, NULL) != 0)
 		return 3;
-	}
 
-	if (pthread_join(p2, NULL) != 0){
+	if (pthread_join(p2, NULL) != 0)
 		return 4;
-	}
 
 	// freeing the memory allocated
 	pthread_mutex_destroy(&mutex);
-	printf("number of mails %d\n", mails);
+	printf("number of counter %d\n", counter);
 
 	return 0;
 }

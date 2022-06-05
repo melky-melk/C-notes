@@ -64,7 +64,7 @@ void* consumer(void* args){
 }
 int main(int argc, char** argv){
 	pthread_t thread[THREAD_NUM];
-	pthread_mutex_init(&mutex_buffer);
+	pthread_mutex_init(&mutex_buffer, NULL);
 
 	// number of avaliable slots in the beginning (the buffer is 10 so 10 empty slots in the beginning)
 	sem_init(&sem_empty, 0, 10);

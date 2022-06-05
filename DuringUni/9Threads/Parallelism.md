@@ -20,7 +20,6 @@ https://www.youtube.com/watch?v=RY_2gElt3SA
 those are called race conditions
 
 
-
 Task-parallelism: parallelism achieved from executing different
 tasks at the same time (i.e., in parallel).
 Data-parallelism: performing the same task to different data-items
