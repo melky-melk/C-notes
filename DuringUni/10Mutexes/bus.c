@@ -93,6 +93,7 @@ void * bus(void * arg) {
 
     // Free up that many seats_taken
     printf("Bus is going to board %d seats for passengers already waiting\n", num);
+	// so increment the number of seats that the passengers are taking
     for (int i = 0; i < num; i++) sem_post(&seats_taken);
 
     // Wait until they've all boarded
