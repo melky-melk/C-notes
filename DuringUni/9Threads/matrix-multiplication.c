@@ -6,7 +6,7 @@
 
 #define WIDTH 512
 // the resulting matrix is a row entry 2D array, not an actual matrix
-#define IDX(x, y) ((y)*WIDTH + (x))
+#define IDX(x, y) ((x) + (y)*WIDTH)
 
 #define NTHREADS 4
 
