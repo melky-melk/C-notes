@@ -24,7 +24,6 @@ name of the file you want to map in.
 
 
 ```c
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -33,6 +32,7 @@ name of the file you want to map in.
 #include <fcntl.h>
 #include <sys/mman.h>
 #define SOME_DATA (24)
+
 int main(int argc, char** argv) {
 	if(argc != 2) {
 		//Need two arguments
@@ -59,10 +59,10 @@ int main(int argc, char** argv) {
 	munmap(block, stat_b.st_size);
 	close(fd);
 }
+
 ```
 
 can use it like a character array you have malloced youself.
-
 with map anon, you give a file descriptor of -1
 
 when you mmap memory vefore the fork, only 1 mmap is made. when you do map_shared it would both point to the same thing. if you change the shared map address in another thing, it would change the shared map address in the place where it was created
