@@ -5,7 +5,7 @@
 
 int main(){
 	//strtok essentially returns the pointer to the
-	char* line = "MELK LIME LEMON BEAN\n"
+	char* line = "MELK LIME LEMON BEAN\n";
 
 	// feeds the line into the str tok where it is saved
 	char* command = strtok(line, " ");
@@ -18,8 +18,8 @@ int main(){
 	strstr(line, "BEAN");
 
 	//strcspn counts up to the string
-	int bean_num = strcspn(command_line, "BEAN");
+	int bean_num = strcspn(command, "BEAN");
 
 	// sets the string to cut off early by using a null character
-	command_line[strcspn(command_line, "\n")] = 0;
+	command[strcspn(command, "\n")] = 0;
 }
