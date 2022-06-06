@@ -10,7 +10,8 @@ int main(int argc, char* argv[]) {
 	// file_descriptor[1] should be the write file
 	//takes 2 integers, file descriptors to the pipe, they act as an key to say if you want to write or read to it, its like a file, but you have 2
 	
-	if (pipe(file_descriptor) == -1) { //creates the pipe
+	// pipe command creates the pipe
+	if (pipe(file_descriptor) == -1) { 
 		puts("an error occured with opening a pipe");
 		return 1;
 	}

@@ -28,7 +28,6 @@ int main(int argc, char** argv){
 	}
 
 	else {
-
 		// waits for a signa; 
 		struct sigaction sig;
 		sig.sa_flags = SA_RESTART; //want to restart scanf once you finish execution
