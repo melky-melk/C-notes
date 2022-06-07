@@ -89,7 +89,6 @@ int student_main(int argc, char **argv){
 		// finished forking all of the process, all workers and cleaners
 		wait(NULL);
 
-
 		int command = rand() % 1;
 		write(fd[write_end], &command, sizeof(int));
 		kill(parent_pid, SIGUSR1);
@@ -128,10 +127,9 @@ int student_main(int argc, char **argv){
 			}
 			// otherwise its from cleaner process
 			else {
-				if (pop_command)
+				push(parent_stack, 420, &err);
+				if (err != 0)
 					pop(parent_stack, &err);
-				else
-					push(parent_stack, 420, &err);
 			}
 		}
 

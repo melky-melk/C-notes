@@ -8,6 +8,10 @@ int primes[10] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29};
 void* routine(void* arg){
 	int index = * (int*)arg;
 	printf("%d ", primes[index]);
+	// need to malloc it out of the stack so it doesnt disappear after
+	int* answer = malloc(sizeof(int));
+	*answer = index*2;
+	return (void*) answer;
 }
 
 // passing unique values into each thread, better for parallelism, when they run and dont depend on each other
@@ -29,11 +33,15 @@ int main(int argc, char** argv){
 		free(a);
 	}
 
+	int* return_value;
 	for (int i = 0; i < 10; i++){
-		if (pthread_join(&threads[i], NULL) != 0){
+		if (pthread_join(&threads[i], (void**) &return_value) != 0){
 			perror("Failed to join thread");
 			return 1;
 		}
+
+		printf("return value from thread is %d\n", return_value);
+		free(return_value);
 	}
 
 	return 0;
