@@ -31,6 +31,13 @@ struct message {
 };
 
 int add_usr(struct server **srv, struct user **usr, char *usrn, char *pwrd) {
+	/*
+	this method creates a copy of the memory using malloc with n + 1 and assigns it the new user values
+	then once the malloc has all the old memory and the new memory addition
+	you then create a new mmap for the server
+	and transfer all the information from the temp malloc to the new mmap
+	*/
+
     // creates a copy of the users inside the server
 	struct user *cpy = (struct user*)malloc(
                     sizeof(struct user) * ((*srv)->num_usr + 1));
@@ -42,7 +49,7 @@ int add_usr(struct server **srv, struct user **usr, char *usrn, char *pwrd) {
     cpy->id = (*srv)->num_usr;
 	(*srv)->num_usr++;
 
-	// truncates the users to now fit the new user size
+	// truncates the users to now fit the new user size (not the copyy)
     ftruncate((*srv)->fd_usr, sizeof(struct user) * (*srv)->num_usr);
 	
 	//creates the new user for real 

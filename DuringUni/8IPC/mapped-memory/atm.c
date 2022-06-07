@@ -34,7 +34,7 @@ int main() {
         perror("shm_open");
     }
 
-	// creates the shared memory data (similar to malloc)
+	// creates the shared memory data (similar to malloc) or if the memory exists it gives a pointer to that memory
     struct bank* bank_data = mmap(NULL, sizeof(struct bank), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (bank_data == MAP_FAILED) {
         perror("mmap failed");

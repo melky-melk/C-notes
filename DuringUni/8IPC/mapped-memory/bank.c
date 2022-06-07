@@ -32,7 +32,8 @@ const struct account init_accounts[] = {
         .cardno = 12345689,
         .pin = 4123,
         .balance = 8000,
-    }};
+    }
+};
 
 int main() {
     struct bank init_bank = {.num_acc = 4};
@@ -46,17 +47,19 @@ int main() {
 
     ftruncate(fd, sizeof(init_bank));
 
+	// when you use mmap, and the data has already been created would it just access that and give a pointer
+	// otherwise it would allocate new space
     void* bank_data = mmap(NULL, sizeof(init_bank), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (bank_data == MAP_FAILED) {
         perror("mmap failed");
         return 0;
     }
-
     memcpy(bank_data, &init_bank, sizeof(init_bank));
 
     // block
     getchar();
 
+	//freeing everything
     munmap(bank_data, sizeof(init_bank));
     close(fd);
     shm_unlink("bank_data_TOP_SECRET");

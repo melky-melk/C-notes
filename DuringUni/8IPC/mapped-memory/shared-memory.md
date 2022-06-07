@@ -1,3 +1,13 @@
+# experimenting notes
+
+its essentially sharing memory between other programs
+
+you use shm_open as a way to access that memory that was allocated
+
+if you need to resize an area in memory its best to allocate a double pointer
+and that double pointer points to an mmap, which can be mremap ed because you can simply reassign it
+
+# In tutorial notes
 mmap() is the function that 
 
 the actual ram is the visible memory, and the addresses are not actual addresses in the physical memory. if you run multiple programs and print addresses you will get similar addresses
