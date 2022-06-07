@@ -6,6 +6,9 @@
 #include <stdbool.h>
 #include <errno.h>
 #include <time.h>
+#include <time.h>
+#include <limits.h>
+#include <float.h>
 
 #include <unistd.h>
 #include <signal.h>
