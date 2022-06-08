@@ -26,6 +26,8 @@
 // back up the 'gate' for waiting, and open up the special queue back to BUS_CAPACITY 
 // so that the cycle can continue. 
 
+// when the sem is greater than 0 then it locks and doesnt work
+
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -66,7 +68,7 @@ void * rider(void * arg) {
 
     printf("Rider %d is now waiting\n", id);
 
-    // See if we can get in the bus if there are enough seats (decrimenting the seats)
+    // See if we can get in the bus if there are enough seats (decrimenting the seats), meaning check if it is 0, if it is not 0 then wait
     sem_wait(&avaliable_seats);
 
     // will block the thread until a seat is avaliable to actually be taken before they can continue the function call

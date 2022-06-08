@@ -9,16 +9,19 @@
 
 sem_t semaphore;
 // semaphores are either decrimented or incremented, when it is 0, it will allow a thread to process
+// when a semaphore is greater than 0, it locks and doesnt continue
 
 
 void* routine(void* args){
 	// wait is similar to a lock, post is similar to an unlock
+	
 	// going to check the semaohre value, if it is 0, then it will wait on the semaphore, if it is higher then it will decriment it
 	printf("(%d) Waiting in the login queue\n", * (int*)args);
 	sem_wait(&semaphore);
 	printf("(%d) Logged in\n", * (int*)args);
 	sleep(rand() % 5 + 1);
 	printf("(%d) Logged out\n", * (int*)args);
+	
 	// it increments the value of the semaphore so more threads can get in
 	sem_post(&semaphore);
 	free(args);

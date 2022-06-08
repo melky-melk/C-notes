@@ -92,3 +92,4 @@ its basically using vram to guve a specifica address
 `shm_open` is the same thing as opening files. like in mkfifo, you can access things from not just the child and parent, you can do it from other programs
 
 can cat the mapped memory
+
