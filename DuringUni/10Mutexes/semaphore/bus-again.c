@@ -2,66 +2,70 @@
 #include <pthread.h>
 #include <string.h>
 #include <stdlib.h>
+#include <semaphore.h>
+
 #define MAX 3
 
 sem_t boarding_seats;
 pthread_mutex_t station;
+pthread_cond_t cond_seats;
+int total_passengers = 0;
 
 // any variables you need
 void * passenger(void * arg){
-	int counter = *((int *)arg);
+	int id = *((int*)arg);
 	puts("Passenger: I am trying to enter the station.");
-	// if some otehrs are boarding then you pause it here
-	pthread_mutex_unlock(&station);
 
 	// checks if the lock is in use (i.e. if its locked by something else), if it is then it prints a message and locks
-	if (/* pthread_mutex_trylock(&station) != 0 || */ counter > 3){
+	if (total_passengers > 3 /*|| pthread_mutex_trylock(&station) != 0*/){
 		// once its unlocked you can pass through
 		puts("Passenger: Station is full. Waiting for the next round.");
+		
+		while (total_passengers > 3){
+			pthread_cond_wait(&cond_seats, &station);
+		}
 		// then locks until its avaliable
-		pthread_mutex_lock(&station);
+		pthread_mutex_unlock(&station);
 	}
-
-	pthread_mutex_unlock(&station);
-
 	puts("Passenger: In station now, waiting for the next bus.");
+
 	// starts at 0, then once the bus arrives it incriments and lets things through
 	sem_wait(&boarding_seats);
 
 	int passengers_remaining;
 	sem_getvalue(&boarding_seats, &passengers_remaining);
 	
-	printf("Passenger: %d boarding. There are %d left.\n", counter, passengers_remaining);
+	pthread_mutex_lock(&station);
+	printf("Passenger: %d boarding. There are %d left in the station.\n", id, passengers_remaining);
+	pthread_mutex_unlock(&station);
 	return NULL;
 }
 
 void * bus(void * arg){
 	puts("Bus: BUS ARRIVING");
 
-	int passengers_waiting;
-	pthread_mutex_lock(&station);
-	sem_getvalue(&boarding_seats, &passengers_waiting);
-
-	if (passengers_waiting == 0){
+	if ((total_passengers) == 0){
 		puts("Bus: No passengers. Depart!");
-		return;
+		return NULL;
 	}
 
-	printf("Bus: %d passengers are waiting. Board!\n", passengers_waiting);
+	printf("Bus: %d passengers are waiting. Board!\n", total_passengers);
 
-	if (passengers_waiting > MAX){
-		passengers_waiting = MAX;
+	int boarding_passengers = total_passengers;
+	if (total_passengers > MAX){
+		boarding_passengers = MAX;
 	}
 
-	for (int i = 0; i < passengers_waiting; i++){
+	for (int i = 0; i < boarding_passengers; i++){
 		// will let the passengers through
 		sem_post(&boarding_seats);
-	}   
+	}  
 
-	puts("Bus: All passengers have boarded. Depart!");
+	pthread_mutex_lock(&station); 
+	printf("Bus: All %d passengers have boarded. Depart!\n", boarding_passengers);
+	total_passengers -= boarding_passengers;
 	pthread_mutex_unlock(&station);
-
-	*counter = passengers_waiting;
+	pthread_cond_signal(&cond_seats);
 
 	return NULL;
 }
@@ -83,12 +87,8 @@ int main() {
 		
 		else if(!strncmp(buffer, "PASS", 4)){
 			pthread_create(passenger_threads + (counter), NULL, passenger, (void*) &counter);
-			// pthread_create(passenger_threads + (counter), NULL, passenger, NULL);
+			total_passengers++;
 			counter++;
-
-			// if (counter == MAX){
-			// 	pthread_mutex_lock(&station);
-			// }
 		}
 		
 		else if(!strncmp(buffer, "QUIT", 4)){
