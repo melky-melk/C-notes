@@ -114,7 +114,7 @@ void get_hma (float * array, int w, int h, int * found_x, int * found_y) {
 int student_main(int argc, char **argv)
 {
 	int x, y;
-	float array[9] = {1,2,3,4,5,6,7,8,9};
+	float array[9] = {1,2,3,4,5,6,7,8,9};  
 	
 	get_hma(array, 3, 3, &x, &y);
 	printf("x = %d y = %d\n",x,y);
