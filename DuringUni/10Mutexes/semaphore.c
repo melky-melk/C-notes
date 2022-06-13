@@ -8,15 +8,14 @@
 #define THREAD_NUM 16
 
 sem_t semaphore;
-// semaphores are either decrimented or incremented, when it is 0, it will allow a thread to process
-// when a semaphore is greater than 0, it locks and doesnt continue
-
+// semaphores are either decrimented or incremented, when it greater than 0, it will decriment the value and continue
+// when a semaphore is less than or equal to 0, it locks and doesnt continue
 
 void* routine(void* args){
 	// wait is similar to a lock, post is similar to an unlock
 	
 	printf("(%d) Waiting in the login queue\n", * (int*)args);
-	// going to check the semaphore value, if it is greater than 0, then it will continue, and decriment it. 
+	// going to check the semaphore value, if it is greater than 0, then it will continue and decriment the value. 
 	// if it is 0 then it will stop and wait till its not 0 anymore at which point it will decriment and continue. 
 	sem_wait(&semaphore);
 	printf("(%d) Logged in\n", * (int*)args);
