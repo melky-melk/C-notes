@@ -76,13 +76,18 @@ int student_main(int argc, char **argv){
 		// Cleaner - performs operations with the stack when it is full or when it is empty. 
 		// Cleaner processes cannot operate on the stack while Worker processes operate and vice versa.
 
+		// for every worker it would try forking?
 		for (int i = 0; i < workers; i++){
 			fork_ret = fork();
+			if (fork_ret != 0)
+				break;
 		}
 
 		if (fork_ret != 0){
 			for (int i = 0; i < cleaners; i++){
 				fork_ret = fork();
+				if (fork_ret != 0)
+					break;
 			}
 		}
 
@@ -94,9 +99,10 @@ int student_main(int argc, char **argv){
 		kill(parent_pid, SIGUSR1);
 		close(fd[write_end]);
 	}
-	// P0
+
+	// P0 with the main bit
 	else {
-		close(fd[read_end]);
+		close(fd[write_end]);
 		pid_t* all_processes = malloc(total_processes * sizeof(pid_t));
 
 		int counter = 0;
@@ -109,6 +115,7 @@ int student_main(int argc, char **argv){
 		while (1){
 			pause();
 
+			// check the counter which process it corresponds to
 			counter = 0;
 			for (int i = 0; i < total_processes; i++){
 				if (signalPid == all_processes[i])
@@ -118,7 +125,8 @@ int student_main(int argc, char **argv){
 			int err = 0;
 			int pop_command = -1;
 			pop_command = read(fd[read_end], &pop_command, sizeof(int));
-			//then the signal came from a worker process
+			// if the counter is within the range of the workers
+			// then the signal came from a worker process
 			if (counter < workers){
 				if (pop_command)
 					pop(parent_stack, &err);
@@ -134,7 +142,7 @@ int student_main(int argc, char **argv){
 		}
 
 		free(all_processes);
-		close(fd[write_end]);
+		close(fd[read_end]);
 	}
 
 	return 0;
