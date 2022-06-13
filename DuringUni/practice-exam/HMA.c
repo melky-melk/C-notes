@@ -7,6 +7,8 @@
 #include <float.h>
 
 #define debug 1
+#define nthreads 9
+
 
 typedef struct worker_args{
 	float * array;
@@ -42,10 +44,10 @@ void* calculate_center(void* args){
 	}
 
 	(*average) /= 9.0;
-	return average;
+	return (void*) average;
 }
 
-void get_hma_parallel(int nthreads, float * array, int w, int h, int * found_x, int * found_y) {
+void get_hma_parallel(float * array, int w, int h, int * found_x, int * found_y) {
 	// pre : w > 0 h > 0
 	// returns the position of the highest magnitude average of the array
 	// in variables found_x and found_y
@@ -64,13 +66,13 @@ void get_hma_parallel(int nthreads, float * array, int w, int h, int * found_x, 
 			args->h = h;
 			args->x = j;
 			args->y = i;
-			pthread_create(&threads[i + j*w], NULL, &calculate_center, args);
+			pthread_create(threads + (i + j*w), NULL, &calculate_center, args);
 		}
 	}
 
-	for (int i = 0; i < w*h; i++){
+	for (int i = 0; i < h; i++){
 		for (int j = 0; j < w; j++){
-			int* average;
+			float* average;
 			pthread_join(threads[i + j*w], (void**) &average);
 
 			if ((*average) > highest){
@@ -116,8 +118,8 @@ int student_main(int argc, char **argv)
 	
 	get_hma(array, 3, 3, &x, &y);
 	printf("x = %d y = %d\n",x,y);
-	// get_hma_parallel(9, array, 3, 3, &x, &y);
-	// printf("x = %d y = %d\n",x,y);
+	get_hma_parallel(array, 3, 3, &x, &y);
+	printf("x = %d y = %d\n",x,y);
 
     return 0;
 }
