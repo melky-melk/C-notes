@@ -6,9 +6,10 @@
 
 #define MAX 3
 
-sem_t boarding_seats;
 pthread_mutex_t station;
 pthread_cond_t cond_seats;
+sem_t boarding_seats;
+
 int total_passengers = 0;
 
 // any variables you need
@@ -35,9 +36,7 @@ void * passenger(void * arg){
 	int passengers_remaining;
 	sem_getvalue(&boarding_seats, &passengers_remaining);
 	
-	pthread_mutex_lock(&station);
 	printf("Passenger: %d boarding. There are %d left in the station.\n", id, passengers_remaining);
-	pthread_mutex_unlock(&station);
 	return NULL;
 }
 
@@ -60,6 +59,12 @@ void * bus(void * arg){
 		// will let the passengers through
 		sem_post(&boarding_seats);
 	}  
+
+	//wait for all of them to decriment first
+	int passengers_left = -1;
+	while (passengers_left != 0){
+		sem_getvalue(&boarding_seats, &passengers_left);
+	}
 
 	printf("Bus: All %d passengers have boarded. Depart!\n", boarding_passengers);
 	total_passengers -= boarding_passengers;

@@ -26,7 +26,7 @@ int count = 0;
 pthread_mutex_t mutex_buffer;
 
 // can use semaphores because they have values stored in it
-sem_t sem_empty;
+sem_t avaliable_slots;
 sem_t sem_full;
 
 void* producer(void* args){
@@ -34,22 +34,24 @@ void* producer(void* args){
 		// produce
 		int x = rand() % 100;
 
-		// checks if there are avaliable slots for the semaphore to be added
-		sem_wait(&sem_empty);
+		// checks if there are avaliable slots for producer to add to
+		sem_wait(&avaliable_slots);
 		pthread_mutex_lock(&mutex_buffer);
 		// add to the buffer
 		buffer[count] = x;
 		count++;
 		pthread_mutex_unlock(&mutex_buffer);
-		// increment the number of slots taken
+		// increment the number of slots that the consumer needs to use
 		sem_post(&sem_full);
 	}
 }
 
 void* consumer(void* args){
 	while (1){
-		//wait until there is at least, 1 value inside the semaphore/1 value inside the buffer, before attempting to take something out
+		//wait until there is at least, 1 value inside the value inside the buffer, before attempting to take something out
 		sem_wait(&sem_full);
+
+		// then locks the mutex so nothing else can take from it 
 		pthread_mutex_lock(&mutex_buffer);
 
 		// Remove from the buffer
@@ -57,17 +59,19 @@ void* consumer(void* args){
 		count--;
 
 		pthread_mutex_unlock(&mutex_buffer);
-		sem_post(&sem_empty);
+
+		// then returns the slot
+		sem_post(&avaliable_slots);
 		// consume
 		printf("Got %d\n", x);
 	}
 }
 int main(int argc, char** argv){
 	pthread_t thread[THREAD_NUM];
-	pthread_mutex_init(&mutex_buffer, NULL);
+	pthread_mutex_init(&mutex_buffer);
 
-	// number of avaliable slots in the beginning (the buffer is 10 so 10 empty slots in the beginning)
-	sem_init(&sem_empty, 0, 10);
+	// number of avaliable slots in the beginning (the buffer is 10 so 10 empty slots in the beginning that the thread can work on)
+	sem_init(&avaliable_slots, 0, 10);
 	sem_init(&sem_full, 0, 0);
 
 	for (int i = 0; i < THREAD_NUM; i++) {
@@ -80,7 +84,7 @@ int main(int argc, char** argv){
 
 	}
 	pthread_mutex_destroy(&mutex_buffer);
-	sem_destroy(&sem_empty);
+	sem_destroy(&avaliable_slots);
 	sem_destroy(&sem_full);
 	return 0;
 }
