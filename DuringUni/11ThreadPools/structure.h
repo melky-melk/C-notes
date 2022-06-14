@@ -12,7 +12,9 @@
 
 // Data structure for storing the thread jobs.
 struct thread_job {
+	//takes in the function it will execute
     void (*fn) (void*);
+	// and the data it is performing work on
     void * data;
 };
 

@@ -2,8 +2,7 @@
 #include "queue.h"
 #include <stdio.h>
 
-void* print_from(void* arg)
-{
+void* print_from(void* arg){
     int start = *((int*)arg);
 
     for (int i = 0; i < 1000; i++)
@@ -12,15 +11,13 @@ void* print_from(void* arg)
     return NULL;
 }
 
-void* sum(void* arg)
-{
+void* sum(void* arg){
     int* x = malloc(sizeof(int));
     *x = *((int*)arg) + 123;
     return x;
 }
 
-void thread_pool_test()
-{
+void thread_pool_test(){
     thread_pool_t* thread_pool = thread_pool_init(5);
 
     int a = 2000;
@@ -39,8 +36,7 @@ void thread_pool_test()
     free(x);
 }
 
-void dummy(void* x)
-{
+void dummy(void* x){
     printf("%d", *((int*)x));
 }
 

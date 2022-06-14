@@ -321,6 +321,9 @@ void destroy_bst(bst *root)
 	}
 }
 
+//-------------------------BST TRAVERSALS------------------------//
+// havent tested it but, it should work? ¯\_(ツ)_/¯
+
 void pre_order(tree_node* current_node, Node** queue){
 	if (current_node != NULL){
 		queue.enqueue(current_node);
