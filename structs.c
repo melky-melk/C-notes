@@ -29,7 +29,7 @@ void stack_push(Node** head, void* data){
 	*head = node;
 }
 
-void queue_push(Node** head, void* data){
+void enqueue(Node** head, void* data){
 	if ((*head) == NULL) {
 		(*head) = new_node(data);
 		return;
@@ -161,7 +161,7 @@ void add_to_array(){
 }
 
 void array_get_index(){
-	
+
 }
 
 void array_put_index(){
@@ -321,3 +321,26 @@ void destroy_bst(bst *root)
 	}
 }
 
+void pre_order(tree_node* current_node, Node** queue){
+	if (current_node != NULL){
+		queue.enqueue(current_node);
+		queue.enqueue(pre_order(current_node->left, queue));
+		queue.enqueue(pre_order(current_node->right, queue));
+	}
+}
+
+void post_order(tree_node* current_node, Node** queue){
+	if (current_node != NULL){
+		queue.enqueue(post_order(current_node->left, queue));
+		queue.enqueue(post_order(current_node->right, queue));
+		queue.enqueue(current_node, queue);
+	}
+}
+
+void in_order(tree_node* current_node, Node** queue){
+	if (current_node != NULL){
+		queue.enqueue(in_order(current_node->left, queue));
+		queue.enqueue(current_node, queue);
+		queue.enqueue(in_order(current_node->right, queue));
+	}
+}
