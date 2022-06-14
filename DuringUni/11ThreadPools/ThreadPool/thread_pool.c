@@ -2,6 +2,12 @@
 
 static void* thread_loop(void* arg);
 
+/*
+a thread pool essentially just a data structure that takes in a number of threads and launch them all at once
+all those inner threads then lock at a semaphore, and the semaphore increments when a task is created and added to the queue
+the task will contain a function that will be performed once the semaphore is unlocked
+*/
+
 // a contructor to create the threadpool
 thread_pool_t* thread_pool_init(int num_threads){
     thread_pool_t* thread_pool = malloc(sizeof(thread_pool_t));

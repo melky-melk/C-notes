@@ -44,8 +44,7 @@ void* queue_pop(queue_t* queue)
     return element;
 }
 
-void queue_print(queue_t* queue, void (*print_item)(void* item))
-{
+void queue_print(queue_t* queue, void (*print_item)(void* item)){
     if (queue == NULL || print_item == NULL)
         return;
 

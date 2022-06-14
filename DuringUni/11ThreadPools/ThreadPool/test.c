@@ -5,32 +5,31 @@
 void* print_from(void* arg){
     int start = *((int*)arg);
 
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
         printf("%d\n", i + start);
 
     return NULL;
 }
 
-void* sum(void* arg){
+void* add_thousand(void* arg){
     int* x = malloc(sizeof(int));
-    *x = *((int*)arg) + 123;
+    *x = *((int*)arg) + 1000;
     return x;
 }
 
 void thread_pool_test(){
     thread_pool_t* thread_pool = thread_pool_init(5);
 
-    int a = 2000;
+    int a = 1;
     create_task(thread_pool, &a, print_from, false);
 
-    int b = 200;
+    int b = 100;
     create_task(thread_pool, &b, print_from, false);
 
-    int c = 100;
-    thread_task_t* task = create_task(thread_pool, &c, sum, true);
+    int c = 1000;
+    thread_task_t* task = create_task(thread_pool, &c, add_thousand, true);
 
     thread_pool_destroy(thread_pool);
-
     int* x = get_task_result(task);
     printf("%d\n", *x);
     free(x);
