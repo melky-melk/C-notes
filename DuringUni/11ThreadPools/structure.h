@@ -56,8 +56,7 @@ struct thread_pool* thread_pool_new(size_t n) {
 
 }
 
-void thread_pool_execute(struct thread_pool* pool,
-struct thread_job* job);
+void thread_pool_execute(struct thread_pool* pool, struct thread_job* job);
 void thread_pool_destroy(struct thread_pool* pool);
 
 struct work_data

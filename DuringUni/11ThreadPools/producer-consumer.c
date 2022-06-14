@@ -7,7 +7,6 @@ CONSUMERS USE THAT DATA AND PERFORM ACTIONS ON IT
 this is shared memory, one puts things in, the other takes things out
 producer amd consumer method relies on having boundaries/a bounded buffer having a limit on how many things can be in a buffer at once
 
-
 if there are more items in the consumer check for, checking if the buffer is full
 checking if the buffer is empty
 */
