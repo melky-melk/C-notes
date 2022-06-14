@@ -61,10 +61,8 @@ void * bus(void * arg){
 		sem_post(&boarding_seats);
 	}  
 
-	pthread_mutex_lock(&station); 
 	printf("Bus: All %d passengers have boarded. Depart!\n", boarding_passengers);
 	total_passengers -= boarding_passengers;
-	pthread_mutex_unlock(&station);
 	pthread_cond_signal(&cond_seats);
 
 	return NULL;

@@ -42,22 +42,18 @@
 
 pthread_mutex_t gate;
 // the starting capacity
+sem_t station_capacity;
 sem_t avaliable_seats;
-sem_t seats_taken;
 static int bus_ride_counter = 0;
 
 void board_bus(int rider_id) {
+    // Try and get a seat seats taken starts at 0, once the bus comes the seats increment and the semaphores are able to take them
+    sem_wait(&avaliable_seats);
 
-    // Try and get a seat similar to a lock
-    sem_wait(&seats_taken);
-
-    // If we got a seat, we're riding! Yay!
     printf("Rider %d is now boarded\n", rider_id);
-
 }
 
 void * rider(void * arg) {
-
     // Our arg is our id; we'll wait this time 
     int id = *((int *) arg);
     sleep(id);
@@ -68,11 +64,12 @@ void * rider(void * arg) {
 
     printf("Rider %d is now waiting\n", id);
 
-    // See if we can get in the bus if there are enough seats (decrimenting the seats), meaning check if it is 0, if it is not 0 then wait
-    sem_wait(&avaliable_seats);
+    // See if we can get in the bus if there are enough seats (decrimenting the seats), meaning check if it is 0 if it is 0 the station is at capacity, and the rider cannot enter the station or attempt to board
+    sem_wait(&station_capacity);
 
     // will block the thread until a seat is avaliable to actually be taken before they can continue the function call
-    sem_wait(&seats_taken);
+	// the bus will post the sem and allow it to actually board
+    sem_wait(&avaliable_seats);
 
     printf("Rider %d boarded the bus!\n", id);
 
@@ -88,19 +85,19 @@ void * bus(void * arg) {
     // board unless they were already waiting 
     pthread_mutex_lock(&gate);
 
-    // Check how many are waiting in the queue
+    // Check how many are waiting in the station
     int num;
-    sem_getvalue(&avaliable_seats, &num);
+    sem_getvalue(&station_capacity, &num);
     num = BUS_CAPACITY - num;
 
-    // Free up that many seats_taken
+    // increment the value so the passengers who are waiting at the semaphore can be let through
     printf("Bus is going to board %d seats for passengers already waiting\n", num);
-	// so increment the number of seats that the passengers are taking
-    for (int i = 0; i < num; i++) sem_post(&seats_taken);
+    for (int i = 0; i < num; i++) sem_post(&avaliable_seats);
 
     // Wait until they've all boarded
+	// meaning keep checking the value until it is 0 again, meaning taht all the passengers havd finished decrimenting
     while (num != 0) {
-        sem_getvalue(&seats_taken, &num);
+        sem_getvalue(&avaliable_seats, &num);
     }
     
     printf("All the passengers have boarded, lets go!\n");
@@ -108,28 +105,25 @@ void * bus(void * arg) {
     bus_ride_counter++;
     printf("Bus ride %d complete.\n", bus_ride_counter);
 
-    // We can now let passengers enter the special next bus queue, so open it back up to 
-    // what its meant to be.
-    sem_getvalue(&avaliable_seats, &num);
+    // now that the ride has occured, the station capacity an be incremented again and passengers can go to the waiting zone
+    sem_getvalue(&station_capacity, &num);
     for (int i = num; i < BUS_CAPACITY; i++) {
-        sem_post(&avaliable_seats);
+        sem_post(&station_capacity);
     }
 
     // Unlock mutex for passengers to enter waiting area. 
     pthread_mutex_unlock(&gate);
-
 }
 
 int main(int argc, char ** argv) {
-
     // Initialise the locks.
     pthread_mutex_init(&gate, NULL);
 
-    // Our current queue semaphore starts with 15 current queue spots available 
-    sem_init(&avaliable_seats, 0, BUS_CAPACITY);
+    // Our current queue semaphore starts with 15 current queue spots available, so then once the station reaches its capacity it will block people from getting into the waiting area for the bus
+    sem_init(&station_capacity, 0, BUS_CAPACITY);
 
-    // Our seats semaphore starts with no spots taken up on the bus yet (because no one had boarded it yet) 
-    sem_init(&seats_taken, 0, 0);
+    // Our seats semaphore starts with no spots taken up on the bus yet (because no one had boarded it yet) and the bus will need to post to allow riders to come on
+    sem_init(&avaliable_seats, 0, 0);
 
     // Make some number of riders, lets say 20
     pthread_t ids[20];

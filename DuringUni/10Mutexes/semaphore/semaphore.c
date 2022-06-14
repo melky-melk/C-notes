@@ -16,7 +16,7 @@ void* routine(void* args){
 	
 	printf("(%d) Waiting in the login queue\n", * (int*)args);
 	// going to check the semaphore value, if it is greater than 0, then it will continue and decriment the value. 
-	// if it is 0 then it will stop and wait till its not 0 anymore at which point it will decriment and continue. 
+	// if it is 0 then it will stop and wait till its greater than 0 at which point it will decriment and continue. 
 	sem_wait(&semaphore);
 	printf("(%d) Logged in\n", * (int*)args);
 	sleep(rand() % 5 + 1);
