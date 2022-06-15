@@ -16,6 +16,8 @@
 #define read_end 0
 #define write_end 1
 
+pthread_mutex_t pipe_mutex;
+
 struct stack{
 
 };
@@ -69,6 +71,7 @@ int student_main(int argc, char **argv){
 	pid_t parent_pid = getpid();
 	struct stack* parent_stack = NULL;
 
+	//this part will fork off and create all of the workers and cleaners
 	if (fork_ret == 0){
 		close(fd[read_end]);
 		
@@ -92,11 +95,19 @@ int student_main(int argc, char **argv){
 		}
 
 		// finished forking all of the process, all workers and cleaners
-		wait(NULL);
-
-		int command = rand() % 1;
-		write(fd[write_end], &command, sizeof(int));
 		kill(parent_pid, SIGUSR1);
+
+		// woill get a random integer to either write 
+		while (1){
+			int command = rand() % 1;
+			
+			pthread_mutex_lock(&pipe_mutex);
+			write(fd[write_end], &command, sizeof(int));
+			pthread_mutex_unlock(&pipe_mutex);
+
+			break;
+		}
+
 		close(fd[write_end]);
 	}
 

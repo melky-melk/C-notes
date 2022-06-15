@@ -5,8 +5,9 @@
 #include <unistd.h>
 #include <limits.h>
 #include <float.h>
+#include <stdbool.h>
 
-#define debug 1
+#define debug true
 #define nthreads 9
 
 typedef struct worker_args{
@@ -120,7 +121,7 @@ int student_main(int argc, char **argv)
 	float array[9] = {1,2,3,4,5,6,7,8,9};  
 	
 	get_hma(array, 3, 3, &x, &y);
-	printf("END RESULT x = %d y = %d\n",x,y);
+	printf("END RESULT x = %d y = %d\n", x, y);
 	get_hma_parallel(array, 3, 3, &x, &y);
 	printf("END RESULT x = %d y = %d\n",x,y);
 

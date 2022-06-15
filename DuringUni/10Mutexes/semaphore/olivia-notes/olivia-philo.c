@@ -14,6 +14,7 @@ void* dine(void* arg) {
     while (true) {
         //get chopsticks
         if (id < THINKERS - 1) {
+			// get the one it is on and the one next to it
             pthread_mutex_lock(&chopsticks[id]);
             pthread_mutex_lock(&chopsticks[id+1]);
         } else {
